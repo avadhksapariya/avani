@@ -1,3 +1,4 @@
+import 'package:avani/palette.dart';
 import 'package:avani/screen_home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'AVANI',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      theme: ThemeData.light(useMaterial3: true).copyWith(
+        scaffoldBackgroundColor: Palette.whiteColor,
+        appBarTheme: const AppBarTheme(backgroundColor: Palette.whiteColor),
       ),
       home: const HomePageScreen(),
     );
