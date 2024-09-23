@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class Palette {
   static const Color mainFontColor = Color.fromRGBO(19, 61, 95, 1);
-  static const Color firstSuggestionBoxColor = Color.fromRGBO(165, 231, 244, 1);
+  static const Color firstSuggestionBoxColor = Color.fromRGBO(180, 205, 220, 1);
   static const Color secondSuggestionBoxColor = Color.fromRGBO(157, 202, 235, 1);
-  static const Color thirdSuggestionBoxColor = Color.fromRGBO(162, 238, 239, 1);
+  static const Color thirdSuggestionBoxColor = Color.fromRGBO(168, 215, 200, 1);
+  static const Color voiceAssistantButtonColor = Color.fromRGBO(210, 210, 218, 1);
   static const Color assistantCircleColor = Color.fromRGBO(209, 243, 249, 1);
   static const Color borderColor = Color.fromRGBO(200, 200, 200, 1);
   static const Color blackColor = Colors.black;
