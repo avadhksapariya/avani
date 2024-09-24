@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:avani/secrets.dart';
 import 'package:http/http.dart' as http;
@@ -10,13 +11,13 @@ class OpenAIService {
     const String tag = 'post_chat_completion';
 
     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
-    print('$tag GET URL: $url');
+    log('$tag GET URL: $url');
 
     Map<String, String> header = {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer $openAIAPIKEY',
     };
-    print('$tag header: $header');
+    log('$tag header: $header');
 
     Map<String, dynamic> body = {
       "model": "gpt-3.5-turbo",
@@ -24,15 +25,15 @@ class OpenAIService {
         {
           "role": "user",
           "content":
-              "Does this message want to generate an AI picture, image, art or anything similar? $prompt. Simply answer with yes or no."
+              "Does this message want to generate an AI picture, image, art or anything similar? $prompt Simply answer with yes or no."
         }
       ],
     };
-    print('$tag body: $body');
+    log('$tag body: $body');
 
     try {
       final response = await http.post(url, headers: header, body: json.encode(body));
-      print('$tag response: ${response.body}');
+      log('$tag response: ${response.body}');
 
       if (response.statusCode == 200) {
         final decodedResponse = json.decode(response.body);
@@ -67,23 +68,23 @@ class OpenAIService {
     const String tag = 'post_chat_completion';
 
     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
-    print('$tag GET URL: $url');
+    log('$tag GET URL: $url');
 
     Map<String, String> header = {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer $openAIAPIKEY',
     };
-    print('$tag header: $header');
+    log('$tag header: $header');
 
     Map<String, dynamic> body = {
       "model": "gpt-3.5-turbo",
       "messages": messages,
     };
-    print('$tag body: $body');
+    log('$tag body: $body');
 
     try {
       final response = await http.post(url, headers: header, body: json.encode(body));
-      print('$tag response: ${response.body}');
+      log('$tag response: ${response.body}');
 
       if (response.statusCode == 200) {
         final decodedResponse = json.decode(response.body);
@@ -104,6 +105,48 @@ class OpenAIService {
   }
 
   Future<String> dallEAPI(String prompt) async {
-    return 'Dall-E';
+    messages.add({
+      'role': 'user',
+      'content': prompt,
+    });
+
+    const String tag = 'post_image_generation';
+
+    var url = Uri.parse('https://api.openai.com/v1/images/generations');
+    log('$tag GET URL: $url');
+
+    Map<String, String> header = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $openAIAPIKEY',
+    };
+    log('$tag header: $header');
+
+    Map<String, dynamic> body = {
+      "model": "dall-e-3",
+      "prompt": prompt,
+      "n": 1,
+    };
+    log('$tag body: $body');
+
+    try {
+      final response = await http.post(url, headers: header, body: json.encode(body));
+      log('$tag response: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final decodedResponse = json.decode(response.body);
+        final imageUrl = decodedResponse['data'][0]['url'];
+        final content = imageUrl.trim();
+
+        messages.add({
+          'role': 'assistant',
+          'content': content,
+        });
+        return content;
+      }
+
+      return 'An internal error occurred.';
+    } catch (e) {
+      return e.toString();
+    }
   }
 }
